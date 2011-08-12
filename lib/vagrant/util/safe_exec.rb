@@ -8,13 +8,14 @@ module Vagrant
     # forking.
     module SafeExec
       def safe_exec(command)
-        fork_instead = false
+        fork_instead = true
         begin
           pid = nil
           pid = fork if fork_instead
           Kernel.exec(command) if pid.nil?
           Process.wait(pid) if pid
         rescue Errno::E045
+
           # We retried already, raise the issue and be done
           raise if fork_instead
 
